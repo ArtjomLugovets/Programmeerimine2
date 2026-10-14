@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../KooliProjekt.Application/KooliProjekt.Application.csproj" />
+  <Project Path="../KooliProjekt.WebAPI/KooliProjekt.WebAPI.csproj" />
+</Solution>
