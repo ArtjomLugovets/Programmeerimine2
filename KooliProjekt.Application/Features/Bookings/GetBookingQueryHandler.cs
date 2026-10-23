@@ -1,11 +1,12 @@
 ﻿using KooliProjekt.Application.Data;
+using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace KooliProjekt.Application.Features.Bookings
 {
-    internal class GetBookingQueryHandler : IRequestHandler<GetBookingQuery, Booking>
+    internal class GetBookingQueryHandler : IRequestHandler<GetBookingQuery, OperationResult<Booking>>
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -14,9 +15,12 @@ namespace KooliProjekt.Application.Features.Bookings
             _dbContext = dbContext;
         }
 
-        public async Task<Booking> Handle(GetBookingQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<Booking>> Handle(GetBookingQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Bookings.FindAsync(request.Id, cancellationToken);
+            var response = new OperationResult<Booking>();
+            response.Value = await _dbContext.Bookings
+                .FindAsync(request.Id);
+            return response;
         }
     }
 }

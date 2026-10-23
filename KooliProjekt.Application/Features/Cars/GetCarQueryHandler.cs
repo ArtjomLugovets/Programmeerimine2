@@ -1,11 +1,12 @@
 using KooliProjekt.Application.Data;
+using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace KooliProjekt.Application.Features.Cars
 {
-    internal class GetCarQueryHandler : IRequestHandler<GetCarQuery, Car>
+    internal class GetCarQueryHandler : IRequestHandler<GetCarQuery, OperationResult<Car>>
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -14,9 +15,12 @@ namespace KooliProjekt.Application.Features.Cars
             _dbContext = dbContext;
         }
 
-        public async Task<Car> Handle(GetCarQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<Car>> Handle(GetCarQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Cars.FindAsync(request.Id, cancellationToken);
+            var response = new OperationResult<Car>();
+            response.Value = await _dbContext.Cars
+                .FindAsync(request.Id, cancellationToken);
+            return response;
         }
     }
 }

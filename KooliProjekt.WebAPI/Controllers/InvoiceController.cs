@@ -1,4 +1,5 @@
-﻿using KooliProjekt.Application.Features.Invoices;
+﻿using KooliProjekt.Application.Features.Cars;
+using KooliProjekt.Application.Features.Invoices;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -30,10 +31,15 @@ namespace KooliProjekt.WebAPI.Controllers
             return Json(invoice);
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> List()
+        [HttpGet("list/{page}/{pageSize}")]
+        public async Task<IActionResult> List(int page, int pageSize)
         {
-            var query = new ListInvoicesQuery();
+            var query = new ListCarsQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
+
             var invoices = await _mediator.Send(query);
             return Json(invoices);
         }

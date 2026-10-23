@@ -1,11 +1,12 @@
 using KooliProjekt.Application.Data;
+using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace KooliProjekt.Application.Features.InvoiceLines
 {
-    internal class GetInvoiceLineQueryHandler : IRequestHandler<GetInvoiceLineQuery, InvoiceLine>
+    internal class GetInvoiceLineQueryHandler : IRequestHandler<GetInvoiceLineQuery, OperationResult<InvoiceLine>>
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -14,9 +15,13 @@ namespace KooliProjekt.Application.Features.InvoiceLines
             _dbContext = dbContext;
         }
 
-        public async Task<InvoiceLine> Handle(GetInvoiceLineQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<InvoiceLine>> Handle(GetInvoiceLineQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.InvoiceLines.FindAsync(request.Id, cancellationToken);
+            var response = new OperationResult<InvoiceLine>();
+            var invoiceLine = await _dbContext.InvoiceLines
+                .FindAsync(request.Id, cancellationToken);
+            response.Value = invoiceLine;
+            return response;
         }
     }
 }

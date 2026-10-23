@@ -1,11 +1,12 @@
 ﻿using KooliProjekt.Application.Data;
+using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace KooliProjekt.Application.Features.Users
 {
-    internal class GetUserQueryHandler : IRequestHandler<GetUserQuery, KooliProjekt.Application.Data.User>
+    internal class GetUserQueryHandler : IRequestHandler<GetUserQuery, OperationResult<User>>
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -14,9 +15,12 @@ namespace KooliProjekt.Application.Features.Users
             _dbContext = dbContext;
         }
 
-        public async Task<KooliProjekt.Application.Data.User> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<User>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Users.FindAsync(request.Id, cancellationToken);
+            var response = new OperationResult<User>();
+            response.Value = await _dbContext.Users
+                .FindAsync(request.Id, cancellationToken);
+            return response;
         }
     }
 }

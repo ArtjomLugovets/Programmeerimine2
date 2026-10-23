@@ -33,10 +33,15 @@ namespace KooliProjekt.WebAPI.Controllers
             return Json(booking);
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> List()
+        [HttpGet("list/{page}/{pageSize}")]
+        public async Task<IActionResult> List(int page, int pageSize)
         {
-            var query = new ListBookingQuery();
+            var query = new ListBookingQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
+
             var bookings = await _mediator.Send(query);
             return Json(bookings);
         }

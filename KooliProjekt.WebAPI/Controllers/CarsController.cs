@@ -30,10 +30,15 @@ namespace KooliProjekt.WebAPI.Controllers
             return Json(car);
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> List()
+        [HttpGet("list/{page}/{pageSize}")]
+        public async Task<IActionResult> List(int page, int pageSize)
         {
-            var query = new ListCarsQuery();
+            var query = new ListCarsQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
+
             var cars = await _mediator.Send(query);
             return Json(cars);
         }
