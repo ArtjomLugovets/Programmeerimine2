@@ -1,12 +1,11 @@
-using KooliProjekt.Application.Data;
+using KooliProjekt.Application.Dto;
 using KooliProjekt.Application.Infrastructure.Paging;
 using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
-using System.Collections.Generic;
 
 namespace KooliProjekt.Application.Features.Cars
 {
-    public class ListCarsQuery : IRequest<OperationResult<PagedResult<Car>>>
+    public class ListCarsQuery : IRequest<OperationResult<PagedResult<CarDto>>>
     {
         public int Page { get; set; }
         public int PageSize { get; set; }
