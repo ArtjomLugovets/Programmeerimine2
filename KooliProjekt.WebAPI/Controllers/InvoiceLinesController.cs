@@ -1,5 +1,4 @@
-﻿using KooliProjekt.Application.Features.Cars;
-using KooliProjekt.Application.Features.InvoiceLines;
+﻿using KooliProjekt.Application.Features.InvoiceLines;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace KooliProjekt.WebAPI.Controllers
         [HttpGet("list/{page}/{pageSize}")]
         public async Task<IActionResult> List(int page, int pageSize)
         {
-            var query = new ListCarsQuery
+            var query = new ListInvoiceLinesQuery
             {
                 Page = page,
                 PageSize = pageSize
@@ -39,6 +38,20 @@ namespace KooliProjekt.WebAPI.Controllers
 
             var invoiceLines = await _mediator.Send(query);
             return Json(invoiceLines);
+        }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> Save(SaveInvoiceLineCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Json(result);
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete([FromBody] DeleteInvoiceLineCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Json(result);
         }
     }
 }

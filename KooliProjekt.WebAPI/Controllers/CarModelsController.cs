@@ -1,4 +1,5 @@
-﻿using KooliProjekt.Application.Features.CarModels;
+﻿using KooliProjekt.Application.Features.Bookings;
+using KooliProjekt.Application.Features.CarModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -44,6 +45,20 @@ namespace KooliProjekt.WebAPI.Controllers
 
             var carModels = await _mediator.Send(query);
             return Json(carModels);
+        }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> Save(SaveCarModelCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Json(result);
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete([FromBody] DeleteCarModelCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Json(result);
         }
     }
 }

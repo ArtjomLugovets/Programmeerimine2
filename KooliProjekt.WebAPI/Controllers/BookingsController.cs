@@ -45,5 +45,19 @@ namespace KooliProjekt.WebAPI.Controllers
             var bookings = await _mediator.Send(query);
             return Json(bookings);
         }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> Save(SaveBookingCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Json(result);
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete([FromBody] DeleteBookingCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Json(result);
+        }
     }
 }
