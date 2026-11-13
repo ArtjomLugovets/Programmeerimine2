@@ -31,7 +31,7 @@ namespace KooliProjekt.WebAPI.Controllers
                 return NotFound();
             }
 
-            return Json(carModel);
+            return Result(carModel);
         }
 
         [HttpGet("list/{page}/{pageSize}")]
@@ -44,21 +44,21 @@ namespace KooliProjekt.WebAPI.Controllers
             };
 
             var carModels = await _mediator.Send(query);
-            return Json(carModels);
+            return Result(carModels);
         }
 
         [HttpPost("save")]
         public async Task<IActionResult> Save(SaveCarModelCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteCarModelCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
         }
     }
 }

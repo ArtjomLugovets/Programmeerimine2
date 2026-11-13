@@ -1,7 +1,12 @@
 ﻿using KooliProjekt.Application.Features.CarModels;
 using KooliProjekt.Application.Features.Cars;
+using KooliProjekt.Application.Infrastructure.Files;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace KooliProjekt.WebAPI.Controllers
@@ -28,7 +33,7 @@ namespace KooliProjekt.WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Json(car);
+            return Result(car);
         }
 
         [HttpGet("list/{page}/{pageSize}")]
@@ -41,21 +46,79 @@ namespace KooliProjekt.WebAPI.Controllers
             };
 
             var cars = await _mediator.Send(query);
-            return Json(cars);
+            return Result(cars);
         }
 
         [HttpPost("save")]
         public async Task<IActionResult> Save(SaveCarCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteCarCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
+        }
+
+        [HttpPost("AddFile")]
+        public async Task<IActionResult> AddFile(int id, IFormFile file)
+        {
+            var extension = Path.GetExtension(file.FileName);
+            var fileName = Guid.NewGuid().ToString() + extension;
+            using var inputStream = file.OpenReadStream();
+
+            var command = new AddFileCommand();
+            command.CarId = id;
+            command.FileName = fileName;
+            command.InputStream = inputStream;
+
+            var result = await _mediator.Send(command);
+            return Result(result);
+        }
+
+        [HttpDelete("DeleteFile")]
+        public async Task<IActionResult> DeleteFile([FromBody] DeleteFileCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Result(result);
+        }
+
+        [HttpGet("GetFile")]
+        public async Task<IActionResult> GetFile(int carId)
+        {
+            if (carId <= 0)
+            {
+                return BadRequest();
+            }
+
+            var command = new GetFileCommand
+            {
+                CarId = carId,
+            };
+
+            var storedFile = await _mediator.Send(command);
+            if (storedFile == null)
+            {
+                return NotFound();
+            }
+
+            var contentTypeProvider = new FileExtensionContentTypeProvider();
+            if (!contentTypeProvider.TryGetContentType(storedFile.FileName, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return File(storedFile.Content, contentType, storedFile.FileName);
+        }
+
+        [HttpGet("ListFiles")]
+        public async Task<IActionResult> ListFiles()
+        {
+            var files = await _mediator.Send(new ListFilesCommand());
+            return Ok(files);
         }
     }
 }

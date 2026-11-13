@@ -27,7 +27,7 @@ namespace KooliProjekt.WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Json(user);
+            return Result(user);
         }
 
         [HttpGet("list/{page}/{pageSize}")]
@@ -40,21 +40,21 @@ namespace KooliProjekt.WebAPI.Controllers
             };
 
             var users = await _mediator.Send(query);
-            return Json(users);
+            return Result(users);
         }
 
         [HttpPost("save")]
         public async Task<IActionResult> Save(SaveUserCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteUserCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
         }
     }
 }

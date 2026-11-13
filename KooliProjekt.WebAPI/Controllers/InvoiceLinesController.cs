@@ -25,7 +25,7 @@ namespace KooliProjekt.WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Json(invoiceLine);
+            return Result(invoiceLine);
         }
         [HttpGet("list/{page}/{pageSize}")]
         public async Task<IActionResult> List(int page, int pageSize)
@@ -37,21 +37,21 @@ namespace KooliProjekt.WebAPI.Controllers
             };
 
             var invoiceLines = await _mediator.Send(query);
-            return Json(invoiceLines);
+            return Result(invoiceLines);
         }
 
         [HttpPost("save")]
         public async Task<IActionResult> Save(SaveInvoiceLineCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteInvoiceLineCommand command)
         {
             var result = await _mediator.Send(command);
-            return Json(result);
+            return Result(result);
         }
     }
 }
