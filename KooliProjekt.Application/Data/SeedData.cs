@@ -1,9 +1,10 @@
 ﻿
+using KooliProjekt.Application.Authentication;
+using KooliProjekt.Application.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KooliProjekt.Application.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace KooliProjekt.Application.Data
 {
@@ -36,7 +37,7 @@ namespace KooliProjekt.Application.Data
                     Phone = $"+372555{i:0000}",
                     Email = $"customer{i:00}@example.com",
                     IsAdmin = i == 1,
-                    Password = "ChangeMe123!"
+                    Password = PasswordHelper.Hash("ChangeMe123!")
                 });
             }
 
@@ -164,6 +165,7 @@ namespace KooliProjekt.Application.Data
             context.Bookings.AddRange(bookings);
             context.Invoices.AddRange(invoices);
             context.InvoiceLines.AddRange(invoiceLines);
+
 
             context.SaveChanges();
         }
