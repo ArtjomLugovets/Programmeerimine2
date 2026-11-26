@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace KooliProjekt.WebAPI.Controllers
 {
-    public class BookingsController : ApiControllerBase
+    public class BookingsController : AdminApiControllerBase
     {
         private readonly IMediator _mediator;
 
