@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KooliProjekt.Application.Features.Public
+namespace KooliProjekt.Application.Features.Public.Invoices
 {
     public class MyInvoicesQueryHandler : IRequestHandler<MyInvoicesQuery, OperationResult<PagedResult<InvoiceDto>>>
     {

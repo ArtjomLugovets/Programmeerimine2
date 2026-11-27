@@ -2,7 +2,7 @@
 using KooliProjekt.Application.Infrastructure.Results;
 using MediatR;
 
-namespace KooliProjekt.Application.Features.Public
+namespace KooliProjekt.Application.Features.Public.Invoices
 {
     public class MyInvoiceQuery : IRequest<OperationResult<InvoiceDto>>
     {
